@@ -1,4 +1,4 @@
-﻿namespace Sparcpoint.Oscal.ImplementationLayer.Common;
+﻿namespace Sparcpoint.Oscal.Common;
 
 public record ResponsibleRole : OscalRemarksModel
 {
