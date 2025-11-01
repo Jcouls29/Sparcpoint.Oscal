@@ -1,11 +1,10 @@
 ﻿namespace Sparcpoint.Oscal.Common;
 
-public record Resource
+public record Resource : OscalPropsModel
 {
     public Uuid Uuid { get; set; }
     public MarkupLine? Title { get; set; }
     public MarkupMultiline? Description { get; set; }
-    public Prop[]? Props { get; set; }
     public DocumentId[]? DocumentIds { get; set; }
     public Citation? Citation { get; set; }
     public ResourceLink[]? ResourceLinks { get; set; }
