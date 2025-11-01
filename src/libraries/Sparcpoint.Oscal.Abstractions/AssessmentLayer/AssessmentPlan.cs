@@ -5,7 +5,7 @@ namespace Sparcpoint.Oscal.AssessmentLayer;
 public record AssessmentPlan : OscalLayerModel
 {
     public ImportSSP ImportSsp { get; set; } = new();
-    public LocalDefinitions? LocalDefinitions { get; set; }
+    public AssessmentPlanLocalDefinitions? LocalDefinitions { get; set; }
     public TermsAndConditions? TermsAndConditions { get; set; }
     public AssessmentControlSelectionHolder ReviewedControls { get; set; } = new();
     public AssessmentSubject[]? AsessmentSubjects { get; set; }
