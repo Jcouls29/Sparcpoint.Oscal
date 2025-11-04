@@ -1,5 +1,7 @@
 ﻿using Sparcpoint.Extensions.Json;
+using Sparcpoint.Oscal.Base;
 using Sparcpoint.Oscal.Common;
+using Sparcpoint.Oscal.ControlLayer;
 using Sparcpoint.Oscal.ControlLayer.Common;
 using Sparcpoint.Oscal.Primitives;
 using System.Text.Json;
@@ -8,11 +10,15 @@ namespace Sparcpoint.Oscal.Json;
 
 public static class JsonSerializerOptionsBuilder
 {
-    public static JsonSerializerOptions Build()
+    public static JsonSerializerOptions Build(bool writeIndented = false)
     {
         var options = new JsonSerializerOptions();
         options.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower;
         options.ConfigureCommonModels();
+        options.WriteIndented = writeIndented;
+        options.NewLine = "\n";
+        options.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault;
+        options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
 
         return options;
     }
@@ -24,30 +30,46 @@ public static class JsonSerializerOptionsBuilder
             .Configure<Prop>(b => b.Property(p => p.Namespace).Name("ns"))
             .Configure<Resource>(b => b.Property(p => p.ResourceLinks).Name("rlinks"))
             .Configure<ProfileModifyRemove>(b => b.Property(p => p.ByNamespace).Name("by-ns"))
+            .Configure<Catalog>(b => b
+                .Property(p => p.Uuid).Order(0)
+                .Property(p => p.Metadata).Order(10)
+                .Property(p => p.Groups).Order(20)
+                .Property(p => p.BackMatter).Order(30)
+            )
+            .Configure<OscalRemarksModel>(b => b
+                .Property(p => p.Remarks).Order(1000)
+            )
+            .Configure<Address>(b => b
+                .Property(p => p.AddressLines).Name("addr-lines")
+            )
         ;
 
         options
-            .WithStringConverter<Base64Value>((value) => value == null ? null : new Base64Value(value), (value) => value?.Value)
-            .WithStringConverter<EmailAddress>((value) => value == null ? null : new EmailAddress(value), (value) => value?.Value)
-            .WithStringConverter<MarkupLine>((value) => value == null ? null : new MarkupLine(value), (value) => value?.Value)
-            .WithStringConverter<MarkupMultiline>((value) => value == null ? null : new MarkupMultiline(value), (value) => value?.Value)
-            .WithUintConverter<NonNegativeInteger>((value) => value == null ? null : new NonNegativeInteger(value.Value), (value) => value?.Value)
-            .WithUintConverter<PositiveInteger>((value) => value == null ? null : PositiveInteger.Create(value.Value), (value) => value?.Value)
-            .WithStringConverter<Token>((value) => value == null ? null : new Token(value), (value) => value?.Value)
-            .WithStringConverter<Uuid>((value) => value == null ? null : new Uuid(value), (value) => value?.Value)
+            .WithStringConverter<Base64Value>((value) => new Base64Value(value), (value) => value.Value)
+            .WithStringConverter<EmailAddress>((value) => new EmailAddress(value), (value) => value.Value)
+            .WithStringConverter<MarkupLine>((value) => new MarkupLine(value), (value) => value.Value)
+            .WithStringConverter<MarkupMultiline>((value) => new MarkupMultiline(value), (value) => value.Value)
+            .WithUintConverter<NonNegativeInteger>((value) => new NonNegativeInteger(value), (value) => value?.Value ?? 0)
+            .WithUintConverter<PositiveInteger>((value) => PositiveInteger.Create(value), (value) => value?.Value ?? 1)
+            .WithStringConverter<Token>((value) => new Token(value), (value) => value.Value)
+            .WithStringConverter<Uuid>((value) => new Uuid(value), (value) => value.Value)
         ;
+
+        options.Converters.Add(new DateTimeOffsetJsonConverter());
+        options.Converters.Add(new ControlsMatchingJsonConverter());
+        options.Converters.Add(new TokenArrayConverter());
 
         return options;
     }
 
-    private static JsonSerializerOptions WithStringConverter<T>(this JsonSerializerOptions options, Func<string?, T?> setter, Func<T?, string?> getter)
+    private static JsonSerializerOptions WithStringConverter<T>(this JsonSerializerOptions options, Func<string?, T> setter, Func<T, string?> getter)
         where T : struct
     {
         options.Converters.Add(new StructToStringJsonConverter<T>(setter, getter));
         return options;
     }
 
-    private static JsonSerializerOptions WithUintConverter<T>(this JsonSerializerOptions options, Func<uint?, T?> setter, Func<T?, uint?> getter)
+    private static JsonSerializerOptions WithUintConverter<T>(this JsonSerializerOptions options, Func<uint, T?> setter, Func<T?, uint> getter)
         where T : struct
     {
         options.Converters.Add(new StructToUintJsonConverter<T>(setter, getter));

@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="../test/Sparcpoint.Oscal.UnitTests/Sparcpoint.Oscal.UnitTests.csproj" Id="caad648c-8c26-47de-a666-f34206e008d0" />
   <Project Path="libraries/Sparcpoint.Oscal.Abstractions/Sparcpoint.Oscal.Abstractions.csproj" Id="6597512e-a1a4-479b-a2ca-bd16ef173998" />
   <Project Path="libraries/Sparcpoint.Oscal.Json/Sparcpoint.Oscal.Json.csproj" Id="e5e42e50-4789-4aab-8c3c-ea9aa35485f4" />
 </Solution>

@@ -7,7 +7,7 @@ public record Metadata : OscalRemarksModel
     public DateTimeOffset LastModified { get; set; } = DateTimeOffset.MinValue;
     public string Version { get; set; } = string.Empty;
     public string OscalVersion { get; set; } = string.Empty;
-    public MetadataRevision[] Revisions { get; set; } = Array.Empty<MetadataRevision>();
+    public MetadataRevision[]? Revisions { get; set; }
     public DocumentId[]? DocumentIds { get; set; }
     public Role[]? Roles { get; set; }
     public Location[]? Locations { get; set; }
