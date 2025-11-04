@@ -3,5 +3,5 @@
 public record TimingAtFrequency
 {
     public PositiveInteger Period { get; set; }
-    public string Unit { get; set; }
+    public string Unit { get; set; } = string.Empty;
 }
