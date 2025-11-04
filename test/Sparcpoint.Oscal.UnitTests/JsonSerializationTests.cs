@@ -13,21 +13,14 @@ public class JsonSerializationTests
         _Options = JsonSerializerOptionsBuilder.Build(writeIndented: true);
     }
 
-    [Fact]
-    public void ReserializedCatalogJsonMatches()
+    [Theory]
+    [InlineData("catalog.json")]
+    [InlineData("profile.json")]
+    [InlineData("catalog_oscal_official_1.1.3.json")]
+    [InlineData("profile_oscal_official_1.1.3.json")]
+    public void ReserializedJsonMatches(string filename)
     {
-        var expected = GetSampleFile("catalog.json");
-        var catalog = JsonSerializer.Deserialize<OscalModel>(expected, _Options);
-
-        Assert.NotNull(catalog);
-        var actual = StructuralComparison.Canonicalize(JsonSerializer.Serialize(catalog, _Options));
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact]
-    public void ReserializedProfileJsonMatches()
-    {
-        var expected = GetSampleFile("profile.json");
+        var expected = GetSampleFile(filename);
         var catalog = JsonSerializer.Deserialize<OscalModel>(expected, _Options);
 
         Assert.NotNull(catalog);
@@ -38,10 +31,6 @@ public class JsonSerializationTests
     private string GetSampleFile(string filename)
     {
         var sample = File.ReadAllText($"Samples/{filename}");
-
-        // Normalize DateTimeOffsets
-        sample = sample.Replace("0.000000-0", "0.00000-0");
-
         return StructuralComparison.Canonicalize(sample);
     }
 }

@@ -47,7 +47,7 @@ public static class StructuralComparison
             case JsonValue val:
                 {
                     if (val.TryGetValue<string>(out var s) &&
-                        TryCanonDto(s, out var canon))
+                        TryCanonicalizeDateTimeOffset(s, out var canon))
                     {
                         return JsonValue.Create(canon)!;
                     }
@@ -70,5 +70,31 @@ public static class StructuralComparison
         }
         canonical = default!;
         return false;
+    }
+
+    private static bool TryCanonicalizeDateTimeOffset(
+        string s,
+        out string canonical)
+    {
+        // Liberal parse (ISO-8601 variants)
+        if (!DateTimeOffset.TryParse(s, CultureInfo.InvariantCulture,
+            DateTimeStyles.RoundtripKind, out var dto))
+        {
+            canonical = default!;
+            return false;
+        }
+
+        // Convert as requested (UTC or preserve original offset)
+        dto = dto.ToUniversalTime();
+
+        // Quantize precision by TRUNCATION (predictable)
+        long quantumTicks = 10_000;
+
+        var ticks = dto.Ticks - (dto.Ticks % quantumTicks);
+        dto = new DateTimeOffset(ticks, dto.Offset);
+
+        // Stable output
+        canonical = dto.ToString("O", CultureInfo.InvariantCulture);
+        return true;
     }
 }
