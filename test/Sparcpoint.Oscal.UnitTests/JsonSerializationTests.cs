@@ -1,5 +1,4 @@
 ﻿using Sparcpoint.Oscal.Base;
-using Sparcpoint.Oscal.Json;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -11,7 +10,7 @@ public class JsonSerializationTests
 
     public JsonSerializationTests()
     {
-        _Options = JsonSerializerOptionsBuilder.Build(writeIndented: true);
+        _Options = new JsonSerializerOptions().ForOscalModels();
     }
 
     [Theory]

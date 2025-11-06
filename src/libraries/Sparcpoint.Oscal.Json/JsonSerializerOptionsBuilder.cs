@@ -3,21 +3,17 @@ using Sparcpoint.Oscal.Base;
 using Sparcpoint.Oscal.Common;
 using Sparcpoint.Oscal.ControlLayer;
 using Sparcpoint.Oscal.ControlLayer.Common;
+using Sparcpoint.Oscal.Json;
 using Sparcpoint.Oscal.Primitives;
-using System.Text.Json;
 
-namespace Sparcpoint.Oscal.Json;
+namespace System.Text.Json;
 
 public static class JsonSerializerOptionsBuilder
 {
-    public static JsonSerializerOptions Build(bool writeIndented = false)
+    public static JsonSerializerOptions ForOscalModels(this JsonSerializerOptions options)
     {
-        var options = new JsonSerializerOptions();
         options.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower;
         options.ConfigureCommonModels();
-        options.WriteIndented = writeIndented;
-        options.NewLine = "\n";
-        options.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault;
         options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
 
         return options;
