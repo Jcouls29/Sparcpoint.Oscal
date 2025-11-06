@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Sparcpoint.Oscal.ControlLayer;
+﻿namespace Sparcpoint.Oscal.ControlLayer;
 
 public record Catalog : OscalLayerModel
 {

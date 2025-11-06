@@ -2,7 +2,7 @@
 using Sparcpoint.Oscal.ControlLayer;
 using Sparcpoint.Oscal.ImplementationLayer;
 
-namespace Sparcpoint.Oscal.Base;
+namespace Sparcpoint.Oscal;
 
 public record OscalModel
 {
