@@ -56,8 +56,6 @@ public static class JsonSerializerOptionsBuilder
         ;
 
         options.Converters.Add(new DateTimeOffsetJsonConverter());
-        options.Converters.Add(new ControlsMatchingJsonConverter());
-        options.Converters.Add(new TokenArrayConverter());
 
         return options;
     }
