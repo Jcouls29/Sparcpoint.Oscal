@@ -1,5 +1,4 @@
-﻿using Sparcpoint.Oscal.Base;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace Sparcpoint.Oscal.UnitTests;

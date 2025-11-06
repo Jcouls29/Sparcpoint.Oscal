@@ -1,4 +1,5 @@
 ﻿using Sparcpoint.Extensions.Json;
+using Sparcpoint.Oscal;
 using Sparcpoint.Oscal.Base;
 using Sparcpoint.Oscal.Common;
 using Sparcpoint.Oscal.ControlLayer;
@@ -10,6 +11,8 @@ namespace System.Text.Json;
 
 public static class JsonSerializerOptionsBuilder
 {
+    public static JsonSerializerOptions ForOscalModels()
+        => ForOscalModels(new JsonSerializerOptions());
     public static JsonSerializerOptions ForOscalModels(this JsonSerializerOptions options)
     {
         options.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower;
@@ -37,6 +40,9 @@ public static class JsonSerializerOptionsBuilder
             )
             .Configure<Address>(b => b
                 .Property(p => p.AddressLines).Name("addr-lines")
+            )
+            .Configure<OscalModel>(b => b
+                .Property(p => p.Kind).Ignore()
             )
         ;
 

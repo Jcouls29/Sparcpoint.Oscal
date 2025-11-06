@@ -4,9 +4,16 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Schemas\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JsonSchema.Net" Version="7.4.0" />
+    <PackageReference Include="JsonSchema.Net.Data" Version="7.0.0" />
     <PackageReference Include="Sparcpoint.Extensions.Json" Version="1.0.2" />
   </ItemGroup>
 
