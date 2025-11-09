@@ -12,11 +12,23 @@ public class OscalLoaderTests
         _Loader = new JsonOscalLoader();
     }
 
-    [Fact]
-    public void Parse()
+    [Theory]
+    [InlineData("application/json")]
+    [InlineData("application/oscal+json")]
+    [InlineData("application/oscal.catalog+json")]
+    public void CanLoadValidMediaTypes(string mediaType)
     {
-        var parsed = new MediaTypeWithQualityHeaderValue("application/oscal.catalog_json");
+        Assert.True(_Loader.CanLoad(mediaType));
+    }
 
+    [Theory]
+    [InlineData("application/xml")]
+    [InlineData("application/random+json")]
+    [InlineData("text/plain")]
+    [InlineData("multipart/related")]
+    public void CannotLoadInvalidMediaTypes(string mediaType)
+    {
+        Assert.False(_Loader.CanLoad(mediaType));
     }
 
     [Theory]
