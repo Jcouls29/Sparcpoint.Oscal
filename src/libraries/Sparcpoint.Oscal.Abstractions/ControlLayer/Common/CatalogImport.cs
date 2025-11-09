@@ -1,6 +1,6 @@
 ﻿namespace Sparcpoint.Oscal.ControlLayer.Common;
 
-public record ProfileImport
+public record CatalogImport
 {
     public Uri Href { get; set; } = new Uri("about:blank");
     

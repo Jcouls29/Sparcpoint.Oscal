@@ -17,7 +17,7 @@ public static class JsonSerializerOptionsBuilder
     {
         options.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower;
         options.ConfigureCommonModels();
-        options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        options.Encoder = Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
 
         return options;
     }

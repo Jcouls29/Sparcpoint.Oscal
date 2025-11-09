@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Sparcpoint.Oscal.Json;
 
-public static class OscalLoader
+internal static class OscalLoader
 {
     // Cache compiled schemas
     private static readonly ConcurrentDictionary<string, ValueTask<JsonSchema>> _schemaCache = new();
@@ -35,20 +35,20 @@ public static class OscalLoader
                 var result = schema.Evaluate(document.RootElement);
 
                 if (result.IsValid)
-                    return new OscalLoadResult(null, result);
+                    return OscalLoadResult.Failed(ToException(result));
             }
 
             // none matched; return the best (first) failure
             var firstSchema = await GetSchema(SchemaFileByKind.First().Value);
             var firstResult = firstSchema.Evaluate(document.RootElement);
-            return new OscalLoadResult(null, firstResult);
+            return OscalLoadResult.Failed(ToException(firstResult));
         }
 
         // Validate against the detected schema
         if (!SchemaFileByKind.TryGetValue(kind, out var schemaFile))
         {
             // Detected a known key but you don't have that schema embedded yet.
-            return new OscalLoadResult(null, null);
+            return OscalLoadResult.Failed(new Exception($"Could not find embedded schema '{kind}'."));
         }
 
         var detectedSchema = await GetSchema(schemaFile);
@@ -56,7 +56,18 @@ public static class OscalLoader
 
         var model = document.Deserialize<OscalModel>(JsonSerializerOptionsBuilder.ForOscalModels());
 
-        return new OscalLoadResult(model, validation);
+        return OscalLoadResult.Successful(model!);
+    }
+
+    private static Exception ToException(EvaluationResults results)
+    {
+        if (results.HasErrors)
+        {
+            var errors = string.Join("\n", results.Errors!.Select(e => e.Key + ": " + e.Value));
+            return new Exception("JSON Schema validation failed: " + errors);
+        }
+
+        return new Exception("JSON Schema validation failed.");
     }
 
     private static OscalModelKind DetectModelKind(JsonElement root)
