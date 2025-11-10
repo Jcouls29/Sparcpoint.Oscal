@@ -5,10 +5,42 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
+
+    <Title>Sparcpoint.Oscal.Json</Title>
+    <Authors>Justin Coulston, Sparcpoint</Authors>
+    <Company>Sparcpoint</Company>
+    <Product>Sparcpoint.Oscal</Product>
+    <Description>JSON Implementation for OSCAL Models (Loader and Serialization Options). Includes schema validation</Description>
+    <Copyright>(c) 2025 Sparcpoint</Copyright>
+    <PackageProjectUrl>https://github.com/Jcouls29/Sparcpoint.Oscal</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Jcouls29/Sparcpoint.Oscal</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Sparcpoint;OSCAL;NIST;JSON</PackageTags>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageIcon>SPARC_128x128.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
+
+    <VersionPrefix>1.0.0</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Schemas\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\..\SPARC_128x128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
